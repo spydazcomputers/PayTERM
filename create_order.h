@@ -22,7 +22,7 @@ class Create_Order : public QDialog
 public:
 
     explicit Create_Order(QWidget *parent = 0);
-     QJsonObject jsonObj2;
+
     ~Create_Order();
      QSqlDatabase mydb;
      void connClose()

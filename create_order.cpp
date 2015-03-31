@@ -12,6 +12,7 @@ Create_Order::Create_Order(QWidget *parent) :
     ui(new Ui::Create_Order)
 {
     ui->setupUi(this);
+    //Set the focus of the dialog box to the username box
     ui->Price->setFocus();
 
 }
@@ -24,11 +25,9 @@ Create_Order::~Create_Order()
 
 void Create_Order::on_Create_Order_rejected()
 {
+    //Close the logon Dialog and return to Main_Window
+    this->close();
 
-    this->destroy();
-    Login_Dialog ldialog;
-    ldialog.setModal(true);
-    ldialog.exec();
 }
 
 void Create_Order::on_pushButton_clicked()
@@ -38,7 +37,7 @@ void Create_Order::on_pushButton_clicked()
     QByteArray PubKey = "a48ef0ca947fc892b79e07129bae15a80ba54d54d6ea42fa4c50cb14a34c96d5";
     QByteArray PrivKey = "1C0AEf6D6289D0bB0aaffa47ad3Aa8B3Ea0F4589419834Bdc845a3fF8774223a";
 
-   // Initialize parameters for
+   // Initialize parameters for CoinPayments RESTful Post
     QByteArray data;
     QUrlQuery params;
     params.addQueryItem("amount", ui->Price->text());
@@ -52,18 +51,19 @@ void Create_Order::on_pushButton_clicked()
     params.addQueryItem("format", "json");
     data.append(params.toString());
 
-   // qDebug() << data;
 
+    // Generate the HMAC header neaded by CoinPayments API for Authentication
     QByteArray HMAC = QMessageAuthenticationCode::hash(data, PrivKey, QCryptographicHash::Sha512).toHex();
 
     QUrl qrl("https://www.coinpayments.net/api.php");
-    qDebug() << "Calling url: " << qrl.toString();
+
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkRequest request(qrl);
 
+   // Setup the Header to include the Content Type and HMAC
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     request.setRawHeader("HMAC", HMAC);
-   // qDebug() << request.rawHeader("HMAC:");
+
 
     QNetworkReply *reply = manager->post(request, data);
     QEventLoop eventLoop;
@@ -71,17 +71,18 @@ void Create_Order::on_pushButton_clicked()
     eventLoop.exec();
     if (reply->error() == QNetworkReply::NoError)
     {
+        //Read the CoinPayments Response to String
         QString strReply = (QString)reply->readAll();
 
-        //parse json
-        //qDebug() << "Response:" << strReply;
+        //Parse the Coinpayments Respons string as JSON
+
         QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
-
         QJsonObject jsonObj = jsonResponse.object();
-        // Access subtier of JSON result and store in DB
 
-       jsonObj2 = jsonObj["result"].toObject();
-       if (!jsonObj2.isEmpty())
+        // Create a new JSON object Containing only the result portion of the reply
+        QJsonObject jsonObj2 = jsonObj["result"].toObject();
+       //Store the Result in the Database
+        if (!jsonObj2.isEmpty())
        {
             if(connOpen())
             {
@@ -93,14 +94,21 @@ void Create_Order::on_pushButton_clicked()
         }
 
        connClose();
+
+       // Create the Payment Window
        PaymentWithStatus PayWindow;
        QObject::connect(this, SIGNAL(SendReply(QVariantMap)), &PayWindow, SLOT(SetReply(QVariantMap)));
        PayWindow.setModal(true);
-       //qDebug() << jsonObj2;
+
+       // Send the Status URL
        emit SendReply(jsonObj2.toVariantMap());
+
+       //Close the Create Order Window
+       this->close();
+
+       //Open The  Payment Status Window
        PayWindow.exec();
 
-       close();
         return;
     }
 
