@@ -18,19 +18,22 @@ SOURCES += main.cpp\
     login_dialog.cpp \
     create_order.cpp \
     admin.cpp \
-    paymentwithstatus.cpp
+    paymentwithstatus.cpp \
+    sendtext.cpp
 
 HEADERS  += mainwindow.h \
     login_dialog.h \
     create_order.h \
     admin.h \
-    paymentwithstatus.h
+    paymentwithstatus.h \
+    sendtext.h
 
 FORMS    += mainwindow.ui \
     login_dialog.ui \
     create_order.ui \
     admin.ui \
-    paymentwithstatus.ui
+    paymentwithstatus.ui \
+    sendtext.ui
 
 OTHER_FILES += \
     PayTerm/LICENSE \

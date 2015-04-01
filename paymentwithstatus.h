@@ -28,6 +28,7 @@ private slots:
     void SetReply(const QVariantMap &reply);
 
     void on_webView_loadFinished(bool arg1);
+    void on_pushButton_clicked();
 };
 
 #endif // PAYMENTWITHSTATUS_H
