@@ -32,6 +32,10 @@ void Create_Order::on_Create_Order_rejected()
 
 void Create_Order::on_pushButton_clicked()
 {
+
+    // Google API Key for URL Shortenting
+    QByteArray GOOGLEAPI = "AIzaSyButuygbH6-0Y4uKWuKPCu8mXVhGuAT31E";
+
     // Coin Payments Api Key's stored here need to move to database and config through admin landing page
 
     QByteArray PubKey = "a48ef0ca947fc892b79e07129bae15a80ba54d54d6ea42fa4c50cb14a34c96d5";
@@ -94,6 +98,45 @@ void Create_Order::on_pushButton_clicked()
         }
 
        connClose();
+
+       // Shorten the URL
+
+       QByteArray status_url;
+       status_url.append(jsonObj2["status_url"].toString());
+
+
+       QByteArray urldata = "{\"key\":\""+GOOGLEAPI+"\",\"longUrl\":\"" +status_url+ "\"}";
+
+       // For your "Content-Length" header
+
+       QUrl urlqrl("https://www.googleapis.com/urlshortener/v1/url");
+
+       QNetworkAccessManager *urlmanager = new QNetworkAccessManager(this);
+       QNetworkRequest urlrequest(urlqrl);
+
+      // Setup the Header to include the Content Type and HMAC
+       urlrequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+       QNetworkReply *urlreply = urlmanager->post(urlrequest, urldata);
+       qDebug() << urlqrl << urldata;
+
+       QEventLoop urleventLoop;
+       connect(urlreply, SIGNAL(finished()), &urleventLoop, SLOT(quit()));
+       urleventLoop.exec();
+      // if (urlreply->error() == QNetworkReply::NoError)
+      // {
+           QString urlReply = (QString)urlreply->readAll();
+
+           //Parse the Goo.gl Respons string as JSON
+
+           QJsonDocument urljsonResponse = QJsonDocument::fromJson(urlReply.toUtf8());
+           QJsonObject urljsonObj = urljsonResponse.object();
+           qDebug() << "URL SHORT" << urljsonObj;
+     /*  }
+       else
+       {
+           qDebug() << "URL Shorting Error" << urlreply->errorString();
+       }*/
 
        // Create the Payment Window
        PaymentWithStatus PayWindow;

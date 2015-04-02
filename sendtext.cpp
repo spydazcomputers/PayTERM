@@ -21,16 +21,16 @@ void SendText::on_buttonBox_accepted()
     QString username = "feb9a33f9866";
     QString password = "5bd52659b79bd4d0";
 
-    QUrl qrl("https://www.callfire.com/api/1.1/rest/text    ");
+    QUrl qrl("https://www.callfire.com/api/1.1/rest/text");
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkRequest request(qrl);
 
-    QString message =  "WHY ME";
+    QString message =  "'WHY ME'";
     QByteArray data;
     QUrlQuery params;
     params.addQueryItem("Type", "TEXT");
-    params.addQueryItem("To", "+"+ui->MobileNum->text());
+    params.addQueryItem("To", ui->MobileNum->text());
     params.addQueryItem("Message", message);
     data.append(params.toString());
 

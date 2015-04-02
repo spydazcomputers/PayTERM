@@ -57,5 +57,5 @@ void MainWindow::on_actionLogin_triggered()
 void MainWindow::LabelChange(const QString &newText)
 {
     ui->Status_Label->setText(newText);
-    qDebug()<<"Message from textValue Function \n";
+
 }

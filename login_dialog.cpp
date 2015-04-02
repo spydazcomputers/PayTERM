@@ -51,11 +51,11 @@ void Login_Dialog::on_pushButton_clicked()
     {
 
                  int count = 0;
-                 qDebug()<<(count);
+
                  while (qry->next())
                  {
                      count++;
-                     qDebug()<<(count);
+
                  }
                     if (count == 1){
                         modal->setQuery(*qry);
@@ -75,7 +75,7 @@ void Login_Dialog::on_pushButton_clicked()
                             this->reject();
                             cOrder.exec();
 
-                            qDebug()<<"Sent Message";
+
                         }
 
                     }
