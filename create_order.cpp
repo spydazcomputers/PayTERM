@@ -3,6 +3,7 @@
 #include "login_dialog.h"
 #include "mainwindow.h"
 #include "paymentwithstatus.h"
+#include <QValidator>
 
 
 
@@ -13,6 +14,7 @@ Create_Order::Create_Order(QWidget *parent) :
 {
     ui->setupUi(this);
     //Set the focus of the dialog box to the username box
+
     ui->Price->setFocus();
 
 }
