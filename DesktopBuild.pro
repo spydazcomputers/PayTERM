@@ -19,21 +19,24 @@ SOURCES += main.cpp\
     create_order.cpp \
     admin.cpp \
     paymentwithstatus.cpp \
-    sendtext.cpp
+    sendtext.cpp \
+    keypad.cpp
 
 HEADERS  += mainwindow.h \
     login_dialog.h \
     create_order.h \
     admin.h \
     paymentwithstatus.h \
-    sendtext.h
+    sendtext.h \
+    keypad.h
 
 FORMS    += mainwindow.ui \
     login_dialog.ui \
     create_order.ui \
     admin.ui \
     paymentwithstatus.ui \
-    sendtext.ui
+    sendtext.ui \
+    keypad.ui
 
 OTHER_FILES += \
     PayTerm/LICENSE \

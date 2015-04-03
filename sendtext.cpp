@@ -10,6 +10,7 @@ SendText::SendText(QWidget *parent) :
     ui(new Ui::SendText)
 {
     ui->setupUi(this);
+    ui->MobileNum->setFocus();
 
 }
 
