@@ -3,6 +3,8 @@
 #include <QtNetwork>
 #include <QDebug>
 
+QString status_url;
+
 SendText::SendText(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SendText)
@@ -26,7 +28,7 @@ void SendText::on_buttonBox_accepted()
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkRequest request(qrl);
 
-    QString message =  "'WHY ME'";
+    QString message =  "visit "+status_url+" to make your payment";
     QByteArray data;
     QUrlQuery params;
     params.addQueryItem("Type", "TEXT");
@@ -34,7 +36,7 @@ void SendText::on_buttonBox_accepted()
     params.addQueryItem("Message", message);
     data.append(params.toString());
 
-    qDebug () << data;
+    qDebug () << "Status_Url" << status_url;
 
     // HTTP Basic authentication header value: base64(username:password)
     QString concatenated = username + ":" + password;
@@ -63,4 +65,6 @@ void SendText::on_buttonBox_accepted()
 void SendText::SetUrl(const QString &URL)
 {
   status_url = URL;
+  qDebug () << "SetURL Activated";
+
 }

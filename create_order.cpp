@@ -103,13 +103,14 @@ void Create_Order::on_pushButton_clicked()
 
        QByteArray status_url;
        status_url.append(jsonObj2["status_url"].toString());
+       qDebug() << "Status URL " << status_url;
 
-
-       QByteArray urldata = "{\"key\":\""+GOOGLEAPI+"\",\"longUrl\":\"" +status_url+ "\"}";
+       QByteArray urldata = "{\"longUrl\":\""+status_url+"\"}";
+       qDebug()<< "json" << urldata;
 
        // For your "Content-Length" header
 
-       QUrl urlqrl("https://www.googleapis.com/urlshortener/v1/url");
+       QUrl urlqrl("https://www.googleapis.com/urlshortener/v1/url?key="+GOOGLEAPI);
 
        QNetworkAccessManager *urlmanager = new QNetworkAccessManager(this);
        QNetworkRequest urlrequest(urlqrl);
@@ -118,7 +119,7 @@ void Create_Order::on_pushButton_clicked()
        urlrequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
        QNetworkReply *urlreply = urlmanager->post(urlrequest, urldata);
-       qDebug() << urlqrl << urldata;
+       //qDebug() << urlqrl << urldata;
 
        QEventLoop urleventLoop;
        connect(urlreply, SIGNAL(finished()), &urleventLoop, SLOT(quit()));
@@ -131,7 +132,7 @@ void Create_Order::on_pushButton_clicked()
 
            QJsonDocument urljsonResponse = QJsonDocument::fromJson(urlReply.toUtf8());
            QJsonObject urljsonObj = urljsonResponse.object();
-           qDebug() << "URL SHORT" << urljsonObj;
+         //  qDebug() << "URL SHORT" << urljsonObj;
      /*  }
        else
        {
@@ -144,7 +145,7 @@ void Create_Order::on_pushButton_clicked()
        PayWindow.setModal(true);
 
        // Send the Status URL
-       emit SendReply(jsonObj2.toVariantMap());
+       emit SendReply(urljsonObj.toVariantMap());
 
        //Close the Create Order Window
        this->close();

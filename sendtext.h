@@ -11,7 +11,6 @@ class SendText;
 class SendText : public QDialog
 {
     Q_OBJECT
-    QString status_url;
 
 
 public:
@@ -27,8 +26,7 @@ private slots:
 
 private:
     Ui::SendText *ui;
-signals:
-        void SendUrl(QString);
+
 };
 
 

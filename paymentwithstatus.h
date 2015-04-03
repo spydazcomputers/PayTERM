@@ -20,6 +20,9 @@ class PaymentWithStatus : public QDialog
 public:
     explicit PaymentWithStatus(QWidget *parent = 0);
     ~PaymentWithStatus();
+    QString shortUrl;
+
+
 
 private:
     Ui::PaymentWithStatus *ui;
@@ -29,6 +32,9 @@ private slots:
 
     void on_webView_loadFinished(bool arg1);
     void on_pushButton_clicked();
+signals:
+        void SendUrl(QString);
 };
+
 
 #endif // PAYMENTWITHSTATUS_H

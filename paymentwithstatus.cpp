@@ -15,7 +15,8 @@ PaymentWithStatus::PaymentWithStatus(QWidget *parent) :
 void PaymentWithStatus::SetReply(const QVariantMap &reply)
 {
     //Load the status_url of the order created on the Create_order page (From Coin Payments)
-     ui->webView->setUrl(reply["status_url"].toString());
+     ui->webView->setUrl(reply["id"].toString());
+     shortUrl = reply["id"].toString();
 
 }
 
@@ -35,7 +36,10 @@ void PaymentWithStatus::on_webView_loadFinished(bool arg1)
 
 void PaymentWithStatus::on_pushButton_clicked()
 {
+
     SendText Sendatext;
+    QObject::connect(this, SIGNAL(SendUrl(QString)), &Sendatext, SLOT(SetUrl(QString)));
     Sendatext.setModal(true);
+    emit(SendUrl(shortUrl));
     Sendatext.exec();
 }
