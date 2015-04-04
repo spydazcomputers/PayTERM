@@ -40,4 +40,5 @@ OTHER_FILES += \
     PayTerm/LICENSE \
     PayTerm/README.md \
     LICENSE \
-    README.md
+    README.md \
+    PAYTERM.db
